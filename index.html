@@ -1,0 +1,84 @@
+function createFeedbackElement(data, responseTime) {
+    // Create container div
+    var container = document.createElement("div");
+    container.classList.add("container");
+
+    // Create feedback div
+    var feedbackDiv = document.createElement("div");
+    feedbackDiv.classList.add("feedback");
+    feedbackDiv.innerHTML = "Your feedback: ";
+
+    // Create SVG button with thumbs-up icon
+    var thumbsUpButton = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    thumbsUpButton.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    thumbsUpButton.setAttribute("width", "24");
+    thumbsUpButton.setAttribute("height", "24");
+    thumbsUpButton.setAttribute("viewBox", "0 0 24 24");
+    thumbsUpButton.innerHTML = '<path d="M6 15.5l9-9 9 9L20.5 17l-7-7-7 7z"/>';
+
+    // Attach event listener to thumbs-up button
+    thumbsUpButton.addEventListener("click", function() {
+        setFeedback('thumbs-up', data.id);
+    });
+
+    // Append thumbs-up SVG to feedback div
+    feedbackDiv.appendChild(thumbsUpButton);
+
+    // Create SVG button with thumbs-down icon
+    var thumbsDownButton = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    thumbsDownButton.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    thumbsDownButton.setAttribute("width", "24");
+    thumbsDownButton.setAttribute("height", "24");
+    thumbsDownButton.setAttribute("viewBox", "0 0 24 24");
+    thumbsDownButton.innerHTML = '<path d="M6 8.5l9 9 9-9L20.5 7l-7 7-7-7z"/>';
+
+    // Attach event listener to thumbs-down button
+    thumbsDownButton.addEventListener("click", function() {
+        setFeedback('thumbs-down', data.id);
+    });
+
+    // Append thumbs-down SVG to feedback div
+    feedbackDiv.appendChild(thumbsDownButton);
+
+    // Create select element for reasons
+    var selectReason = document.createElement("select");
+    selectReason.id = "reasonDropdown-" + data.id;
+    selectReason.disabled = true;
+    selectReason.innerHTML = `
+        <option value="reason1">Reason 1</option>
+        <option value="reason2">Reason 2</option>
+        <option value="reason3">Reason 3</option>
+    `;
+
+    // Create hidden input for feedback value
+    var hiddenInput = document.createElement("input");
+    hiddenInput.type = "hidden";
+    hiddenInput.id = "feedbackValue-" + data.id;
+
+    // Append elements to feedback div
+    feedbackDiv.appendChild(selectReason);
+    feedbackDiv.appendChild(hiddenInput);
+
+    // Create response time div
+    var responseTimeDiv = document.createElement("div");
+    responseTimeDiv.classList.add("responseTime");
+    responseTimeDiv.textContent = "Response Time: " + responseTime.toFixed(2) + " milliseconds";
+
+    // Create query div
+    var queryDiv = document.createElement("div");
+    queryDiv.classList.add("query");
+    queryDiv.textContent = "Query: " + data.message;
+
+    // Create response div
+    var responseDiv = document.createElement("div");
+    responseDiv.classList.add("response");
+    responseDiv.textContent = "Response: " + data.response;
+
+    // Append all elements to container div
+    container.appendChild(feedbackDiv);
+    container.appendChild(responseTimeDiv);
+    container.appendChild(queryDiv);
+    container.appendChild(responseDiv);
+
+    return container;
+}
